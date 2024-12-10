@@ -3,6 +3,10 @@
     "experimentalDecorators": true, // 使用装饰器模式
     "target": "ES2021", // 指定esma的语法版本
     "moduleResolution": "nodenext", // 设置模块化查找规则，如何查找第三方模块
-    "module": "NodeNext" // 指定生成的模块代码系统格式
+    "module": "NodeNext", // 指定生成的模块代码系统格式
+    "baseUrl": ".",
+    "paths": {
+      "@nestjs/*": ["src/@nestjs/*"]
+    }
   }
 }

@@ -8,5 +8,4 @@ async function bootstrap() {
 }
 
 bootstrap();
-
-//  express + 装饰器
+// express + 装饰器功能实现
