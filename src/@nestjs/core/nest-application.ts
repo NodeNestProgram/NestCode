@@ -39,12 +39,16 @@ export class NestApplication {
         // express的回调请求方式
         this.app[methodMetadata.toLowerCase()](
           routePath,
-          (
-            request: ExpressRequest,
-            res: ExpressResponse,
-            next: NextFunction
-          ) => {
-            const result = Reflect.apply(method, controller, []); // 指定此方法的请求结果，发送给客户端
+          (req: ExpressRequest, res: ExpressResponse, next: NextFunction) => {
+            const args = this.resolveParams(
+              controller,
+              methodName,
+              req,
+              res,
+              next
+            );
+            // 把处理后的结果传递给函数进行执行
+            const result = Reflect.apply(method, controller, args); // 指定此方法的请求结果，发送给客户端
             res.send(result);
           }
         );
@@ -56,6 +60,31 @@ export class NestApplication {
     }
 
     Logger.log("Nest application successfully started", "NestApplication");
+  }
+
+  private resolveParams(
+    instance: any,
+    methodName: string,
+    req: ExpressRequest,
+    res: ExpressResponse,
+    next: NextFunction
+  ) {
+    const paramMetadata = Reflect.getMetadata("params", instance, methodName); // 获取函数参数的原数据
+
+    return paramMetadata
+      .sort((curr, next) => curr.parameterIndex - next.parameterIndex)
+      .map((metadata) => {
+        const { key } = metadata;
+        console.log(key, "key");
+        switch (key) {
+          case "Req":
+          case "Request":
+            return req; // 返回express请求对象
+
+          default:
+            return null;
+        }
+      });
   }
 
   // 应用启动
