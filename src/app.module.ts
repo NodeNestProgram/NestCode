@@ -4,6 +4,6 @@ import { UserController } from "./user.controller";
 
 //  Module代码的组合的基本单元 组合Controller和Service
 @Module({
-  controllers: [UserController],
+  controllers: [UserController, AppController],
 })
 export class AppModule {}
